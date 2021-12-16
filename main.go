@@ -77,9 +77,14 @@ func notifications(ctx context.Context, client *github.Client) chan *github.Noti
 					fmt.Fprintf(os.Stderr, "Error getting gh notifications %v\n", err)
 				}
 				for _, object := range objects {
-					if object.UpdatedAt != nil && since.Before(*object.UpdatedAt) {
-						since = *object.UpdatedAt
+					if object.UpdatedAt != nil {
+						if since.Before(*object.UpdatedAt) {
+							since = *object.UpdatedAt
+						} else if *object.UpdatedAt == since {
+							continue
+						}
 					}
+
 					channel <- object
 				}
 			}
