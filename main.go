@@ -41,6 +41,9 @@ func popUp(notification *github.Notification) {
 		subtitle += " / " + *notification.Reason
 	}
 	title := "Github"
+	if notification.Repository.Name != nil {
+		title = *notification.Repository.Name
+	}
 	sound := "Glass"
 
 	if notification.Subject != nil && notification.Subject.LatestCommentURL != nil {
